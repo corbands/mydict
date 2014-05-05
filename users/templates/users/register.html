@@ -1,0 +1,17 @@
+<html>
+<head>
+	<title>English-memory-helper register</title>
+	{% include 'users/includes/head.html' %}
+</head>
+
+<body>
+
+<form method="post" action="{% url 'users:register_check' %}">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Register and sign in" />
+</form>
+
+
+</body>
+</html>

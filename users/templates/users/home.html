@@ -1,0 +1,34 @@
+<html>
+
+<head>
+	<title>English-memory-helper home</title>
+	{% include 'users/includes/head.html' %}
+</head>
+
+<body>
+
+<h1>Hello, {{ user.username }}!</h1>
+
+{% if error_msg %}
+<p><strong>{{ error_msg }}</strong></p>
+
+
+{% endif %}
+
+{% for word in word_list %}	
+
+	<table>
+		<tr>
+			<td align="right"><a href="{% url 'words:word_edit' word.id %}">{{ word.english }}</a></td>
+			<td align="left">{{ word.russian }}</td>
+		</tr>
+	</table>
+   
+{% endfor %} 
+
+<a href="{% url 'users:signout' %}">Sign out</a>
+
+
+
+</body>
+</html>
