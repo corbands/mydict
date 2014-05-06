@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, logout, login
 
+from django.utils import timezone
+
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-
-from django.contrib.auth.forms import UserCreationForm
 
 from django.contrib.auth.models import User
 from words.models import Word
@@ -36,7 +36,14 @@ def home(request):
 	else:
 		user = request.user
 		error_msg = ''
-		
+
+		if request.method == 'POST':
+			if request.POST.__contains__('english') and request.POST.__contains__('russian'):
+				en = request.POST['english']
+				ru = request.POST['russian']
+				w = Word(english=en, russian=ru, pub_date=timezone.now(), user=request.user)
+				w.save()
+
 	word_list = Word.objects.filter(user=user)
 	return render(request, 'users/home.html', {'user':user, 'error_msg':error_msg, 'word_list':word_list})
 
@@ -44,9 +51,8 @@ def signout(request):
 	logout(request)
 	return HttpResponseRedirect(reverse('users:auth'))
 
-def register(request):
-	form = UserCreationForm()
-	return render(request, 'users/register.html', {'form':form})
+def register(request):	
+	return render(request, 'users/register.html')
 
 def register_check(request):
 	name = request.POST['username']

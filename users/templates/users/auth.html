@@ -9,32 +9,33 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-offset-2">
-				<h2>Please, sign in or register</h2>
+				<h2 class="col-md-offset-3">Please, sign in or register</h2>
 
 				<form class="form-horizontal" role="form" method="post" action="{% url 'users:home' %}">
 					{% csrf_token %}
+
 					<div class="form-group">
-						<label for="input_login" class="col-md-1 control-label">Login</label>
+						<label for="input_login" class="col-md-3 control-label">Login</label>
 					    <div class="col-md-3">
 					      <input type="text" class="form-control" id="input_login" name="username" placeholder="login">
 					    </div>
 					</div>
 
 					<div class="form-group">
-						<label for="input_password" class="col-md-1 control-label">Password</label>
+						<label for="input_password" class="col-md-3 control-label">Password</label>
 					    <div class="col-md-3">
 					      <input type="password" class="form-control" id="input_password" name="password" placeholder="password">
 					    </div>
 					</div>
 
 					<div class="form-group">
-				    	<div class="col-md-offset-1 col-md-3">
+				    	<div class="col-md-offset-3 col-md-3">
 							<input class="btn btn-default" type="submit" value="Sign in" />
 						</div>
 					</div>
 
 					<div class="form-group">
-				    	<div class="col-md-offset-1 col-md-3">
+				    	<div class="col-md-offset-3 col-md-3">
 							<a href="{% url 'users:register' %}">Register</a>
 						</div>
 					</div>

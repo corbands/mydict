@@ -4,9 +4,11 @@
 
 {% if error_message %} <p><strong>{{ error_message }}</strong></p> {% endif %}
 
-<form action="{% url 'users:word_edited' word.id %}" method="post">
+<form action="{% url 'words:word_edited' word.id %}" method="post">
 	{% csrf_token %}
 	english: <input type="text" name="english" value="{{ word.english }}"> <br><br>
 	russian: <input type="text" name="russian" value="{{ word.russian }}"> <br><br>
-	<input type="submit" value="Save" />
+	
+	<input type="submit" name="action" value="Save" />
+	<input type="submit" name="action" value="Delete" />
 </form>
