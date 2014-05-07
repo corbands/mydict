@@ -1,15 +1,19 @@
 <html>
 <head>
 	<title>English-memory-helper register</title>
-	{% include 'users/includes/head.html' %}
+	{% include 'users/include/head.html' %}
 </head>
 
 <body>
 
+    {% include 'users/include/navbar.html' %}
+
 	<div class="container">
 		<div class="row">
 			<div class="col-md-offset-2">
-				<h2 class="col-md-offset-3">Please, register</h2>
+                <div class="page-header">
+                  <h1>Please, register</h1>
+                </div>
 
 				<form class="form-horizontal" role="form" method="post" action="{% url 'users:register_check' %}">
 					{% csrf_token %}

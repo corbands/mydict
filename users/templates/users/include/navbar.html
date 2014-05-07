@@ -1,0 +1,33 @@
+{% load staticfiles %}
+
+<script>
+    function signout()
+    {
+        url = {% url 'users:signout' %};
+        document.location = url;
+    }
+
+</script>
+
+<nav class="navbar" role="navigation">
+    <div class="container" style="background-color:#eeeeee; border-radius:5px;">
+        <div class="col-md-offset-3 col-md-6">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'users:home' %}">Emh</a>
+        </div>
+
+        <ul class="nav navbar-nav">
+            <li><a href="{% url 'users:about' %}">About</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="{% url 'users:home' %}">Home</a></li>
+            <li>
+                <button type="button" class="btn btn-default navbar-btn" onclick="signout()">
+                    <span class="glyphicon glyphicon-log-out"></span> Sign out
+                </button>
+            </li>
+        </ul>
+        </div>
+    </div>
+</nav>

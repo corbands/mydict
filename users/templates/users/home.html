@@ -2,7 +2,7 @@
 
 <head>
 	<title>English-memory-helper home</title>
-	{% include 'users/includes/head.html' %}
+	{% include 'users/include/head.html' %}
 </head>
 
 <body>
@@ -12,19 +12,28 @@
 	{
 		console.log(word_id);		
 		url = "{% url 'words:word_edit' 3 %}";
-		url = url.slice(0, url.length-2)
-		url += word_id		
+		url = url.slice(0, url.length-2);
+		url += word_id;
 		document.location = url;
 	}
 </script>
 
+    {% include 'users/include/navbar.html' %}
+
 	<div class="container">
 		<div class="row">
-			<div class="col-md-offset-5">
-				<h1>Hello, {{ user.username }}!</h1>
+
+            <div class="page-header col-md-offset-2">
+                  <h1>Hello, {{ user.username }}!</h1>
+            </div>
+        </div>
+    	<div class="row">
+            <div class="col-md-offset-5">
 
 				{% if error_msg %}
-					<p><strong>{{ error_msg }}</strong></p>
+                    {% if msg_type == "error" %}
+                        <div class="alert alert-danger">{{ error_msg }}</div>
+                    {% endif %}
 				{% endif %}
 			</div>
 			
