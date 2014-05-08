@@ -15,6 +15,10 @@
                   <h1>Please, register</h1>
                 </div>
 
+                {% if register_failed %}
+                    <div class="alert alert-danger">{{ register_failed }}</div>
+                {% endif %}
+
 				<form class="form-horizontal" role="form" method="post" action="{% url 'users:register_check' %}">
 					{% csrf_token %}
 

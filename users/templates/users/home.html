@@ -24,16 +24,16 @@
 		<div class="row">
 
             <div class="page-header col-md-offset-2">
-                  <h1>Hello, {{ user.username }}!</h1>
+                  <h1>Hello, {{ emh_user.user.username }}!</h1>
+                  <h2>age: {{ emh_user.age }}</h2>
+                  <h2>region: {{ emh_user.region }}</h2>
             </div>
         </div>
     	<div class="row">
             <div class="col-md-offset-5">
 
 				{% if error_msg %}
-                    {% if msg_type == "error" %}
                         <div class="alert alert-danger">{{ error_msg }}</div>
-                    {% endif %}
 				{% endif %}
 			</div>
 			

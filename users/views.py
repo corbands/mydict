@@ -1,65 +1,59 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, logout, login
 
 from django.utils import timezone
 
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
+
 from words.models import Word
+from users.models import EmhUser
 
 def auth(request):
     return render(request, 'users/auth.html')
 
-def home(request):
-    error_msg = ''
-    msg_type = ''
+def auth_check(request):
+    u = request.POST['username']
+    p = request.POST['password']
+    if u == "" or p == "":
+        context = {'auth_failed': "login or password are empty"}
+        return render(request, 'users/auth.html', context)
 
-    if not request.user.is_authenticated():
-        if not request.POST:
-            return HttpResponseRedirect(reverse('users:auth'))
+    user = authenticate(username=u, password=p)
 
-        u = request.POST['username']
-        p = request.POST['password']
-        if u == "" or p == "":
-            context = {'auth_failed':"login or password are empty"}
-            return render(request, 'users/auth.html', context)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            return redirect('users:home')
 
-        # try:
-            # p = request.POST['password1']
-        # except:
-            # p = request.POST['password']
-
-        user = authenticate(username=u, password=p)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                error_msg = "User is valid, active and authenticated"
-            else:
-                error_msg = "The password is valid, but the account has been disabled!"
-                msg_type = "warning"
         else:
-            context = {'auth_failed':"login or password are incorrect!"}
+            msg = "The password is valid, but the account has been disabled!"
+            context = {'auth_failed': msg}
             return render(request, 'users/auth.html', context)
     else:
-        user = request.user
+        context = {'auth_failed':"login or password are incorrect!"}
+        return render(request, 'users/auth.html', context)
 
-        if request.method == 'POST':
-            if request.POST.__contains__('english') and request.POST.__contains__('russian'):
-                en = request.POST['english']
-                ru = request.POST['russian']
-                w = Word(english=en, russian=ru, pub_date=timezone.now(), user=request.user)
-                w.save()
+@login_required
+def home(request):
+    user = request.user
+
+    if request.method == 'POST':
+        if request.POST.__contains__('english') and request.POST.__contains__('russian'):
+            en = request.POST['english']
+            ru = request.POST['russian']
+            w = Word(english=en, russian=ru, pub_date=timezone.now(), user=request.user)
+            w.save()
 
     word_list = Word.objects.filter(user=user)
-
-    context = {'user':user, 'error_msg':error_msg, 'msg_type':msg_type, 'word_list':word_list}
+    emh_user = EmhUser.objects.filter(user=user)
+    context = {'emh_user':emh_user[0], 'word_list':word_list}
     return render(request, 'users/home.html', context)
 
 def signout(request):
     logout(request)
-    return HttpResponseRedirect(reverse('users:auth'))
+    return redirect('users:auth')
 
 def register(request):	
     return render(request, 'users/register.html')
@@ -68,9 +62,13 @@ def register_check(request):
     name = request.POST['username']
     p = request.POST['password1']
     p2 = request.POST['password2']
+    if p != p2:
+        context = { 'register_failed': 'passwords not equal!' }
+        return render(request, 'users/register.html', context)
     # todo check p equal p2
 
     user = User.objects.create_user(name, '', p)
+    emh_user = EmhUser(user = user, age = 40, region="Africa")
     user.save()
 
     user_auth = authenticate(username=name, password=p)
@@ -78,7 +76,7 @@ def register_check(request):
         if user_auth.is_active:
             login(request, user_auth)
 
-    return HttpResponseRedirect(reverse('users:home'))
+    return redirect('users:home')
 
 
 def about(request):
