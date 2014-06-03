@@ -77,7 +77,6 @@
 				<tbody>
 				{% for word in word_list %}	
 					<tr onclick="word_edit({{ word.id }})">
-						<!-- <td><a href="{% url 'words:word_edit' word.id %}">{{ word.english }}</a></td> -->
 						<td>{{ word.english }}</td>
 						<td>{{ word.russian }}</td>
 					</tr>
