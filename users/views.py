@@ -36,7 +36,8 @@ def auth_check(request):
         return render(request, 'users/auth.html', context)
 
 @login_required
-def home(request):
+def home(request, page_number=0):
+    page_number = int(page_number)    
     user = request.user
 
     if request.method == 'POST':
@@ -44,11 +45,25 @@ def home(request):
             en = request.POST['english']
             ru = request.POST['russian']
             w = Word(english=en, russian=ru, pub_date=timezone.now(), user=request.user)
+            
             w.save()
 
     word_list = Word.objects.filter(user=user)
+
+    n = 20
+    beg = 0
+    if len(word_list) < n:
+        end = len(word_list)
+    else:    
+        end = n    
+    
+    if page_number:                
+        beg = n * (page_number)
+        end = n * (page_number + 1)
+
     emh_user = EmhUser.objects.filter(user=user)
-    context = {'emh_user':emh_user[0], 'word_list':word_list}
+    
+    context = {'emh_user':emh_user[0], 'word_list':word_list[beg:end], 'number_of_pages':range(1, len(word_list)/3 + 1)}
     return render(request, 'users/home.html', context)
 
 def signout(request):
