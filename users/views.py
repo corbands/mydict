@@ -44,9 +44,10 @@ def home(request, page_number=0):
         if request.POST.__contains__('english') and request.POST.__contains__('russian'):
             en = request.POST['english']
             ru = request.POST['russian']
-            w = Word(english=en, russian=ru, pub_date=timezone.now(), user=request.user)
-            
-            w.save()
+
+            if len(en) != 0 or len(ru) != 0:
+                w = Word(english=en, russian=ru, pub_date=timezone.now(), user=request.user)
+                w.save()
 
     word_list = Word.objects.filter(user=user)
 
@@ -77,13 +78,17 @@ def register_check(request):
     name = request.POST['username']
     p = request.POST['password1']
     p2 = request.POST['password2']
+    a = request.POST['age']
+    reg = request.POST['region']
+
     if p != p2:
         context = { 'register_failed': 'passwords not equal!' }
         return render(request, 'users/register.html', context)
     # todo check p equal p2
 
     user = User.objects.create_user(name, '', p)
-    emh_user = EmhUser(user = user, age = 40, region="Africa")
+    emh_user = EmhUser(user = user, age = a, region = reg)
+    emh_user.save()
     user.save()
 
     user_auth = authenticate(username=name, password=p)
@@ -96,3 +101,6 @@ def register_check(request):
 
 def about(request):
     return render(request, 'users/about.html')
+
+
+#private methods
