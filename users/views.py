@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, logout, login
 
@@ -36,7 +37,7 @@ def auth_check(request):
         return render(request, 'users/auth.html', context)
 
 @login_required
-def home(request, page_number=0):
+def home(request, page_number=1):
     page_number = int(page_number)    
     user = request.user
 
@@ -51,20 +52,16 @@ def home(request, page_number=0):
 
     word_list = Word.objects.filter(user=user)
 
-    n = 20
-    beg = 0
-    if len(word_list) < n:
-        end = len(word_list)
-    else:    
-        end = n    
-    
-    if page_number:                
-        beg = n * (page_number)
-        end = n * (page_number + 1)
+    n = 3   # количество слов на одной странице по 3, 10, 20
+    beg, end = get_page_wordlist(page_number, word_list, n)
 
     emh_user = EmhUser.objects.filter(user=user)
-    
-    context = {'emh_user':emh_user[0], 'word_list':word_list[beg:end], 'number_of_pages':range(1, len(word_list)/3 + 1)}
+
+    num_pages = len(word_list) / n
+    if len(word_list) % n:
+        num_pages += 1
+
+    context = {'emh_user':emh_user[0], 'word_list':word_list[beg:end], 'pages':range(1, num_pages + 1)}
     return render(request, 'users/home.html', context)
 
 def signout(request):
@@ -104,3 +101,16 @@ def about(request):
 
 
 #private methods
+def get_page_wordlist(page_number, word_list, n):
+    beg = 0
+    if len(word_list) < n:
+        end = len(word_list)
+    else:
+        end = n
+
+    if page_number:
+        page_number -= 1
+        beg = n * (page_number)
+        end = n * (page_number + 1)
+
+    return [beg, end]

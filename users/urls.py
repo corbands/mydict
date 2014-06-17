@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 from django.conf.urls import url, patterns
 
 from users import views

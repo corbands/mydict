@@ -1,14 +1,34 @@
-<h1>{{ word }}</h1>
+<html>
 
-<p>{{ word.pub_date }}</p>
+<head>
+    <title>English-memory-helper word edit</title>
+    {% include 'emh/include/head.html' %}
+</head>
 
-{% if error_message %} <p><strong>{{ error_message }}</strong></p> {% endif %}
+<body>
+{% include 'emh/include/navbar.html' %}
 
-<form action="{% url 'words:word_edited' word.id %}" method="post">
-	{% csrf_token %}
-	english: <input type="text" name="english" value="{{ word.english }}"> <br><br>
-	russian: <input type="text" name="russian" value="{{ word.russian }}"> <br><br>
-	
-	<input type="submit" name="action" value="Save" />
-	<input type="submit" name="action" value="Delete" />
-</form>
+<div class="container">
+    <div class="col-md-offset-4">
+
+        <h1>{{ word }}</h1>
+
+        <p>{{ word.pub_date }}</p>
+
+        {% if error_message %} <p><strong>{{ error_message }}</strong></p> {% endif %}
+
+
+        <form action="{% url 'words:word_edited' word.id %}" method="post">
+            {% csrf_token %}
+            english: <input type="text" name="english" value="{{ word.english }}"> <br><br>
+            russian: <input type="text" name="russian" value="{{ word.russian }}"> <br><br>
+
+            <input type="submit" name="action" value="Save" />
+            <input type="submit" name="action" value="Delete" />
+        </form>
+    </div>
+</div>
+
+</body>
+
+</html>
