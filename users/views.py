@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, logout, login
 
@@ -26,7 +27,7 @@ def auth_check(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            return redirect('users:home')
+            return redirect('users:account', username=user.username)
 
         else:
             msg = "The password is valid, but the account has been disabled!"
@@ -37,9 +38,12 @@ def auth_check(request):
         return render(request, 'users/auth.html', context)
 
 @login_required
-def home(request, page_number=1):
-    page_number = int(page_number)    
-    user = request.user
+def account(request, username='', page_number=1):
+    if username and not check_user(username):
+        raise Http404
+
+    page_number = int(page_number)
+    user = get_user(username)
 
     if request.method == 'POST':
         if request.POST.__contains__('english') and request.POST.__contains__('russian'):
@@ -52,7 +56,7 @@ def home(request, page_number=1):
 
     word_list = Word.objects.filter(user=user)
 
-    n = 3   # количество слов на одной странице по 3, 10, 20
+    n = 5   # количество слов на одной странице по 3, 5, 10, 20
     beg, end = get_page_wordlist(page_number, word_list, n)
 
     emh_user = EmhUser.objects.filter(user=user)
@@ -61,8 +65,10 @@ def home(request, page_number=1):
     if len(word_list) % n:
         num_pages += 1
 
-    context = {'emh_user':emh_user[0], 'word_list':word_list[beg:end], 'pages':range(1, num_pages + 1)}
-    return render(request, 'users/home.html', context)
+    can_add_word = username == request.user.username
+
+    context = {'emh_user':emh_user[0], 'word_list':word_list[beg:end], 'pages':range(1, num_pages + 1), 'can_add_word':can_add_word}
+    return render(request, 'users/account.html', context)
 
 def signout(request):
     logout(request)
@@ -81,7 +87,6 @@ def register_check(request):
     if p != p2:
         context = { 'register_failed': 'passwords not equal!' }
         return render(request, 'users/register.html', context)
-    # todo check p equal p2
 
     user = User.objects.create_user(name, '', p)
     emh_user = EmhUser(user = user, age = a, region = reg)
@@ -93,14 +98,16 @@ def register_check(request):
         if user_auth.is_active:
             login(request, user_auth)
 
-    return redirect('users:home')
+    return redirect('users:account', username=user.username)
 
 
 def about(request):
     return render(request, 'users/about.html')
 
 
+#---------------------------
 #private methods
+#---------------------------
 def get_page_wordlist(page_number, word_list, n):
     beg = 0
     if len(word_list) < n:
@@ -114,3 +121,20 @@ def get_page_wordlist(page_number, word_list, n):
         end = n * (page_number + 1)
 
     return [beg, end]
+
+def check_user(username):
+    users = EmhUser.objects.all()
+    names = []
+    for u in users:
+        names.append(u.user.username)
+
+    return username in names
+
+def get_user(username):
+    users = EmhUser.objects.all()
+    names = []
+    for u in users:
+        if u.user.username == username:
+            return u.user
+
+    return None

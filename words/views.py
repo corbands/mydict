@@ -22,4 +22,4 @@ def word_edited(request, word_id):
 #	latest_word_list = Word.objects.order_by('-pub_date')[:10]
 #	context = { 'latest_word_list': latest_word_list }
 	
-	return HttpResponseRedirect(reverse('users:home'))
+	return HttpResponseRedirect(reverse('users:account', username=request.user.username))
