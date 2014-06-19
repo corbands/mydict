@@ -37,6 +37,7 @@
 				{% endif %}
 			</div>
 			
+			{% if can_add_word %}			
 			<div class="col-md-offset-2">
 				<form role="form" method="post" action="{% url 'users:account' user.username%}">
 					{% csrf_token %}
@@ -53,17 +54,16 @@
 					      <input type="text" class="form-control" id="id_russian" name="russian" placeholder="russian">
 					    </div>
 					</div>
-
-                    {% if can_add_word %}
+                    
 					<div class="form-group">
 						<div class="col-md-2">
 							<input class="btn btn-default" type="submit" value="Add word" />
 						</div>
 					</div>
-                    {% endif %}
-
 				</form>				
 			</div>
+			{% endif %}
+
 		</div>
 
 		<br />
@@ -90,7 +90,7 @@
 			</table>
 
 			{% for i in pages %}
-				<a href="{% url 'users:account' user.username i %}">{{ i }}&nbsp</a>
+				<a href="{% url 'users:account' emh_user.user.username i %}">{{ i }}&nbsp</a>
 			{% endfor %}
 
 

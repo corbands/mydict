@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>English-memory-helper word edit</title>
+    <title>emh word edit</title>
     {% include 'emh/include/head.html' %}
 </head>
 
@@ -23,8 +23,10 @@
             english: <input type="text" name="english" value="{{ word.english }}"> <br><br>
             russian: <input type="text" name="russian" value="{{ word.russian }}"> <br><br>
 
-            <input type="submit" name="action" value="Save" />
-            <input type="submit" name="action" value="Delete" />
+            <div class="form-group col-md-2">
+                <input class="form-control" type="submit" name="action" value="Save" />
+                <input class="form-control" type="submit" name="action" value="Delete" />
+            </div>
         </form>
     </div>
 </div>

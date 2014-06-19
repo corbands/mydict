@@ -86,4 +86,8 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'emh/templates'),
 )
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'emh/static'),
+)
+
 LOGIN_URL = 'users:auth'

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import pdb
+
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, logout, login
@@ -16,6 +18,7 @@ def auth(request):
     return render(request, 'users/auth.html')
 
 def auth_check(request):
+    # pdb.set_trace()
     u = request.POST['username']
     p = request.POST['password']
     if u == "" or p == "":
@@ -24,7 +27,7 @@ def auth_check(request):
 
     user = authenticate(username=u, password=p)
 
-    if user is not None:
+    if user:
         if user.is_active:
             login(request, user)
             return redirect('users:account', username=user.username)
