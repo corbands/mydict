@@ -107,6 +107,12 @@ def register_check(request):
 def about(request):
     return render(request, 'users/about.html')
 
+@login_required
+def edit_profile(request):
+    if request.method == "POST":
+        # todo save new data fields
+        pass
+    return render(request, 'users/edit_profile.html')
 
 #---------------------------
 #private methods
