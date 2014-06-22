@@ -15,6 +15,7 @@ def word_edited(request, word_id):
 		word.english = request.POST['english'];
 		word.russian = request.POST['russian'];
 		word.save()
+
 	elif request.POST['action'] == 'Delete':
 		word = get_object_or_404(Word, pk=word_id)
 		word.delete()

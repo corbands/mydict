@@ -18,7 +18,7 @@ def auth(request):
     return render(request, 'users/auth.html')
 
 def auth_check(request):
-    # pdb.set_trace()
+    # pdb.set_trace()    
     u = request.POST['username']
     p = request.POST['password']
     if u == "" or p == "":
@@ -42,7 +42,7 @@ def auth_check(request):
 
 @login_required
 def account(request, username='', page_number=1):
-    if username and not check_user(username):
+    if username and not username_logged(username):
         raise Http404
 
     page_number = int(page_number)
@@ -68,16 +68,16 @@ def account(request, username='', page_number=1):
     if len(word_list) % n:
         num_pages += 1
 
-    can_add_word = username == request.user.username
+    can_edit = username == request.user.username
 
-    context = {'emh_user':emh_user[0], 'word_list':word_list[beg:end], 'pages':range(1, num_pages + 1), 'can_add_word':can_add_word}
+    context = {'emh_user':emh_user[0], 'word_list':word_list[beg:end], 'pages':range(1, num_pages + 1), 'can_edit':can_edit}
     return render(request, 'users/account.html', context)
 
 def signout(request):
     logout(request)
     return redirect('users:auth')
 
-def register(request):	
+def register(request):
     return render(request, 'users/register.html')
 
 def register_check(request):
@@ -109,10 +109,18 @@ def about(request):
 
 @login_required
 def edit_profile(request):
-    if request.method == "POST":
-        # todo save new data fields
-        pass
-    return render(request, 'users/edit_profile.html')
+    context = {}
+    # if request.method == "POST":
+    #     if request.method == "POST":
+    #         emh_user         = request.user.emhuser            
+    #         emh_user.name    = request.POST['name']                                                           
+    #         emh_user.surname = request.POST['surname']                                                                                
+    #         emh_user.age     = request.POST['age']
+    #         emh_user.region  = request.POST['region']
+    #         emh_user.about   = request.POST['about']
+    #         emh_user.save()
+
+    return render(request, 'users/edit_profile.html', context)
 
 #---------------------------
 #private methods
@@ -131,7 +139,9 @@ def get_page_wordlist(page_number, word_list, n):
 
     return [beg, end]
 
-def check_user(username):
+import pdb
+def username_logged(username):
+    # pdb.set_trace()
     users = EmhUser.objects.all()
     names = []
     for u in users:

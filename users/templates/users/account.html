@@ -21,14 +21,7 @@
     {% include 'emh/include/navbar.html' %}
 
 	<div class="container">
-		<div class="row">
-
-            <div class="page-header col-md-offset-2">
-                  <h1>Hello, {{ emh_user.user.username }}!</h1>
-                  <h2>age: {{ emh_user.age }}</h2>
-                  <h2>region: {{ emh_user.region }}</h2>
-            </div>
-        </div>
+            
     	<div class="row">
             <div class="col-md-offset-5">
 
@@ -37,45 +30,55 @@
 				{% endif %}
 			</div>
 			
-			{% if can_add_word %}			
-			<div class="col-md-offset-2">
-				<form role="form" method="post" action="{% url 'users:account' user.username%}">
-					{% csrf_token %}
-					<div class="form-group">
-						<!-- <label for="id_english" class="col-md-1 control-label">english</label> -->
-						<!-- <label for="id_english">english</label> -->
-					    <div class="col-md-2">
-					      <input type="text" class="form-control" id="id_english" name="english" placeholder="english">
-					    </div>
-					</div>
-					<div class="form-group">
-						<!-- <label for="id_russian" class="col-md-1 control-label">russian</label> -->
-					    <div class="col-md-2">
-					      <input type="text" class="form-control" id="id_russian" name="russian" placeholder="russian">
-					    </div>
-					</div>
-                    
-					<div class="form-group">
-						<div class="col-md-2">
-							<input class="btn btn-default" type="submit" value="Add word" />
+			<div class="row page-header">		
+			
+				{% if can_edit %}	
+				<div class="col-md-offset-3">
+					<form role="form" method="post" action="{% url 'users:account' user.username%}">
+						{% csrf_token %}
+						<div class="form-group">
+							<!-- <label for="id_english" class="col-md-1 control-label">english</label> -->
+							<!-- <label for="id_english">english</label> -->
+						    <div class="col-md-2">
+						      <input type="text" class="form-control" id="id_english" name="english" placeholder="english">
+						    </div>
 						</div>
-					</div>
-				</form>				
-			</div>
-			{% endif %}
+						<div class="form-group">
+							<!-- <label for="id_russian" class="col-md-1 control-label">russian</label> -->
+						    <div class="col-md-2">
+						      <input type="text" class="form-control" id="id_russian" name="russian" placeholder="russian">
+						    </div>
+						</div>
+	                    
+						<div class="form-group">
+							<div class="col-md-2">
+								<input class="btn btn-default" type="submit" value="Добавить" />
+							</div>
+						</div>
+					</form>				
+				</div>
+				{% endif %}
+				<div class="col-md-offset-9">
+					<div class="col-md-3">
+		                  <h3>{{ emh_user.user.username }}</h3>
+		                  {% if can_edit %}
+		                  <a href="{% url 'users:edit_profile' %}">Изменить</a>
+		                  {% endif %}
+		            </div>
+	            </div>
+            </div>
 
 		</div>
 
-		<br />
-		<br />
+		
 
 		<div class="row">
-			<div class="col-md-offset-2 col-md-6">
+			<div class="col-md-offset-3 col-md-6">
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>english</th>
-						<th>russian</th>
+						<th>Английский</th>
+						<th>Русский</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -95,15 +98,7 @@
 
 		   </div>
 		</div>
-
-		<br />
-		<br />
-
-		<div class="row ">
-			<div class="col-md-offset-5">
-				<a href="{% url 'users:signout' %}">Sign out</a>
-			</div>
-		</div>
+	
 	</div>
 
 
