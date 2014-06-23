@@ -28,7 +28,7 @@
             {% if user.is_authenticated %}
                 <li><a href="{% url 'users:account' user.username 1 %}">{{ user.username }}</a></li>
             {% endif %}
-            <li>
+            <li style="padding-right:5px">
                 <button type="button" class="btn btn-default navbar-btn" onclick="signout()">
                     <span class="glyphicon glyphicon-log-out"></span> Выйти
                 </button>

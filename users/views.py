@@ -22,7 +22,7 @@ def auth_check(request):
     u = request.POST['username']
     p = request.POST['password']
     if u == "" or p == "":
-        context = {'auth_failed': "login or password are empty"}
+        context = {'auth_failed': "Поля логин и/или пароль не заполнены"}
         return render(request, 'users/auth.html', context)
 
     user = authenticate(username=u, password=p)
@@ -37,7 +37,7 @@ def auth_check(request):
             context = {'auth_failed': msg}
             return render(request, 'users/auth.html', context)
     else:
-        context = {'auth_failed':"login or password are incorrect!"}
+        context = {'auth_failed':"Логин и/или пароль некорректны"}
         return render(request, 'users/auth.html', context)
 
 @login_required
@@ -81,18 +81,21 @@ def register(request):
     return render(request, 'users/register.html')
 
 def register_check(request):
-    name = request.POST['username']
-    p = request.POST['password1']
-    p2 = request.POST['password2']
-    a = request.POST['age']
-    reg = request.POST['region']
+    username  = request.POST['username']
+    p         = request.POST['password1']       
+    p2        = request.POST['password2']      
+    a         = request.POST['age']             
+    reg       = request.POST['region']        
+    firstname = request.POST['firstname']
+    lastname  = request.POST['lastname'] 
+    about     = request.POST['about']
 
     if p != p2:
         context = { 'register_failed': 'passwords not equal!' }
         return render(request, 'users/register.html', context)
 
-    user = User.objects.create_user(name, '', p)
-    emh_user = EmhUser(user = user, age = a, region = reg)
+    user = User.objects.create_user(username, '', p, first_name=firstname, last_name=lastname)
+    emh_user = EmhUser(user = user, age = a, region = reg, about = about)
     emh_user.save()
     user.save()
 
@@ -109,18 +112,23 @@ def about(request):
 
 @login_required
 def edit_profile(request):
-    context = {}
-    # if request.method == "POST":
-    #     if request.method == "POST":
-    #         emh_user         = request.user.emhuser            
-    #         emh_user.name    = request.POST['name']                                                           
-    #         emh_user.surname = request.POST['surname']                                                                                
-    #         emh_user.age     = request.POST['age']
-    #         emh_user.region  = request.POST['region']
-    #         emh_user.about   = request.POST['about']
-    #         emh_user.save()
+    return render(request, 'users/edit_profile.html')
 
-    return render(request, 'users/edit_profile.html', context)
+@login_required
+def profile_edited(request):
+    if request.method == "POST":
+        if request.method == "POST":
+            user            = request.user
+            emh_user        = user.emhuser            
+            user.first_name = request.POST['firstname']                                                           
+            user.last_name  = request.POST['lastname']                                                                                
+            emh_user.age    = request.POST['age']
+            emh_user.region = request.POST['region']
+            emh_user.about  = request.POST['about']
+            emh_user.save()
+            user.save()
+
+    return redirect('users:account', username=request.user)
 
 #---------------------------
 #private methods

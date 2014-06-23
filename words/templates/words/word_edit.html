@@ -9,7 +9,7 @@
 {% include 'emh/include/navbar.html' %}
 
 <div class="container">
-    <div class="col-md-offset-4">
+    <div class="col-md-offset-3">
 
         <h1>{{ word }}</h1>
 
@@ -18,14 +18,31 @@
         {% if error_message %} <p><strong>{{ error_message }}</strong></p> {% endif %}
 
 
-        <form action="{% url 'words:word_edited' word.id %}" method="post">
+        <form class="form-horizontal" action="{% url 'words:word_edited' word.id %}" method="post">
             {% csrf_token %}
-            english: <input type="text" name="english" value="{{ word.english }}"> <br><br>
-            russian: <input type="text" name="russian" value="{{ word.russian }}"> <br><br>
 
-            <div class="form-group col-md-2">
-                <input class="form-control" type="submit" name="action" value="Save" />
-                <input class="form-control" type="submit" name="action" value="Delete" />
+            <div class="form-group">
+                <label for="id_english" class="col-md-2 control-label">Английский</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="id_english" name="english" value="{{ word.english }}" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_russian" class="col-md-2 control-label">Русский</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="id_russian" name="russian" value="{{ word.russian }}" />
+                </div>
+            </div>
+
+            <br />
+
+            <div class="col-md-offset-1 col-md-2">
+                <input type="submit" class="btn btn-default" name="save" value="Сохранить">
+            </div>
+
+            <div class="col-md-2">
+                <input type="submit" class="btn btn-default" name="delete" value="Удалить" />
             </div>
         </form>
     </div>

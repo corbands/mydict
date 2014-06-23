@@ -17,6 +17,7 @@ urlpatterns = patterns('',
 	url(r'signout/$', views.signout, name='signout'),
 
 	url(r'user/settings/$', views.edit_profile, name='edit_profile'),
+	url(r'user/settings/edited$', views.profile_edited, name='profile_edited'),
 
     url(r'user/(?P<username>\w+)$', views.account, name='account'),
     url(r'user/(?P<username>\w+)/$', views.account, name='account'),
