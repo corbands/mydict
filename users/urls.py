@@ -1,8 +1,7 @@
 from django.conf.urls import url, patterns
 
 from users import views
-
-
+from users.views import EmhUserView
 
 urlpatterns = patterns('',
 	url(r'^$', views.auth, name='auth'),
@@ -16,8 +15,7 @@ urlpatterns = patterns('',
 	url(r'register_check/$', views.register_check, name='register_check'),
 	url(r'signout/$', views.signout, name='signout'),
 
-	url(r'user/settings/$', views.edit_profile, name='edit_profile'),
-	url(r'user/settings/edited$', views.profile_edited, name='profile_edited'),
+	url(r'user/settings/$', EmhUserView.as_view(), name='profile_edit'),
 
     url(r'user/(?P<username>\w+)$', views.account, name='account'),
     url(r'user/(?P<username>\w+)/$', views.account, name='account'),

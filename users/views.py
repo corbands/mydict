@@ -5,11 +5,16 @@ from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, logout, login
 
+from django.utils.decorators import method_decorator
+
 from django.utils import timezone
 
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
+
+from django.views.generic.base import View
+from django.views.generic.edit import FormView
 
 from words.models import Word
 from users.models import EmhUser
@@ -110,25 +115,42 @@ def register_check(request):
 def about(request):
     return render(request, 'users/about.html')
 
-@login_required
-def edit_profile(request):
-    return render(request, 'users/edit_profile.html')
+class EmhUserView(FormView):
+    template_name = 'users/profile_edit.html'
+    form_class = EmhUserForm
+    success_url = 'users:account'
+    # @method_decorator(login_required)
+    # def dispatch(self, *args, **kwargs):
+        # return super(EmhUserView, self).dispatch(*args, **kwargs)
 
-@login_required
-def profile_edited(request):
-    if request.method == "POST":
-        if request.method == "POST":
-            user            = request.user
-            emh_user        = user.emhuser            
-            user.first_name = request.POST['firstname']                                                           
-            user.last_name  = request.POST['lastname']                                                                                
-            emh_user.age    = request.POST['age']
-            emh_user.region = request.POST['region']
-            emh_user.about  = request.POST['about']
-            emh_user.save()
-            user.save()
+    def form_valid(self, form):
+        form.save()
+        return super(EmhUserView, self).form_valid(form)
 
-    return redirect('users:account', username=request.user)
+    # def get_success_url(self):
+        # return reverse(success_url, username=request.user)
+
+    # def get(self, request, *args, **kwargs):
+    #     form = EmhUserForm()
+    #     return render(request, self.template_name, {'form': form})    
+
+    # def post(self, request, *args, **kwargs):
+    #     form = EmhUserForm(request.POST)
+    #     if form.is_valid:
+    #         user            = request.user
+    #         emh_user        = user.emhuser            
+    #         user.first_name = request.POST['firstname']                                                           
+    #         user.last_name  = request.POST['lastname']                                                                      
+    #         emh_user.age    = request.POST['age']
+    #         emh_user.region = request.POST['region']
+    #         emh_user.about  = request.POST['about']
+    #         emh_user.save()
+    #         user.save()
+    #         return redirect('users:account', username = request.user)
+    #     else:
+    #         return render(request, self.template_name, {'form':form})
+
+
 
 #---------------------------
 #private methods
