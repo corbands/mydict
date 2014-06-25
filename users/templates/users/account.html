@@ -65,7 +65,7 @@
 					<div class="col-md-3">
 		                  <h3>{{ emh_user.user.username }}</h3>
 		                  {% if can_edit %}
-		                  <a href="{% url 'users:profile_edit' %}">Изменить</a>
+		                  <a href="{% url 'users:profile_edit' emh_user.user.username %}">Изменить</a>
 		                  {% endif %}
 		            </div>
 	            </div>

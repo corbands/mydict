@@ -12,38 +12,49 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm
 
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
 
+
 from words.models import Word
 from users.models import EmhUser
+from users.forms import EmhUserForm, EmhUserRegisterForm
 
-def auth(request):
-    return render(request, 'users/auth.html')
+class AuthView(View):
+    template_name = 'users/auth.html'
 
-def auth_check(request):
-    # pdb.set_trace()    
-    u = request.POST['username']
-    p = request.POST['password']
-    if u == "" or p == "":
-        context = {'auth_failed': "Поля логин и/или пароль не заполнены"}
-        return render(request, 'users/auth.html', context)
+    def get(self, request, *args, **kwargs):
+        form = AuthenticationForm()
+        return render(request, self.template_name, {'form': form})    
 
-    user = authenticate(username=u, password=p)
+    def post(self, request, *args, **kwargs):
+        # todo понять как работает form.is_valid()
+        # form = AuthenticationForm(request.POST)
+        # u = form.cleaned_data['username']
+        # p = form.cleaned_data['password']
+        u = request.POST['username']
+        p = request.POST['password']
+        if u == "" or p == "":
+            context = {'auth_failed': "Поля логин и/или пароль не заполнены"}
+            return render(request, self.template_name, context)
 
-    if user:
-        if user.is_active:
-            login(request, user)
-            return redirect('users:account', username=user.username)
+        user = authenticate(username=u, password=p)
 
+        if user:
+            if user.is_active:
+                login(request, user)
+                return redirect('users:account', username=user.username)
+
+            else:
+                msg = "The password is valid, but the account has been disabled!"
+                context = {'auth_failed': msg}
+                return render(request, self.template_name, context)
         else:
-            msg = "The password is valid, but the account has been disabled!"
-            context = {'auth_failed': msg}
-            return render(request, 'users/auth.html', context)
-    else:
-        context = {'auth_failed':"Логин и/или пароль некорректны"}
-        return render(request, 'users/auth.html', context)
+            context = {'auth_failed':"Логин и/или пароль некорректны"}
+            return render(request, self.template_name, context)        
+
 
 @login_required
 def account(request, username='', page_number=1):
@@ -82,73 +93,70 @@ def signout(request):
     logout(request)
     return redirect('users:auth')
 
-def register(request):
-    return render(request, 'users/register.html')
-
-def register_check(request):
-    username  = request.POST['username']
-    p         = request.POST['password1']       
-    p2        = request.POST['password2']      
-    a         = request.POST['age']             
-    reg       = request.POST['region']        
-    firstname = request.POST['firstname']
-    lastname  = request.POST['lastname'] 
-    about     = request.POST['about']
-
-    if p != p2:
-        context = { 'register_failed': 'passwords not equal!' }
-        return render(request, 'users/register.html', context)
-
-    user = User.objects.create_user(username, '', p, first_name=firstname, last_name=lastname)
-    emh_user = EmhUser(user = user, age = a, region = reg, about = about)
-    emh_user.save()
-    user.save()
-
-    user_auth = authenticate(username=name, password=p)
-    if user_auth is not None:
-        if user_auth.is_active:
-            login(request, user_auth)
-
-    return redirect('users:account', username=user.username)
-
 
 def about(request):
     return render(request, 'users/about.html')
 
-class EmhUserView(FormView):
-    template_name = 'users/profile_edit.html'
-    form_class = EmhUserForm
-    success_url = 'users:account'
-    # @method_decorator(login_required)
-    # def dispatch(self, *args, **kwargs):
-        # return super(EmhUserView, self).dispatch(*args, **kwargs)
+class RegisterView(FormView):
+    template_name = 'users/register.html'
+    form_class = EmhUserRegisterForm
 
     def form_valid(self, form):
-        form.save()
-        return super(EmhUserView, self).form_valid(form)
+        username  = form.cleaned_data['username']
+        password  = form.cleaned_data['password']
+        password2 = form.cleaned_data['password2']
+        region    = form.cleaned_data['region']
+        firstname = form.cleaned_data['first_name']
+        lastname  = form.cleaned_data['last_name']
+        about     = form.cleaned_data['about']
 
-    # def get_success_url(self):
-        # return reverse(success_url, username=request.user)
+        if password != password2:
+            context = { 'register_failed': 'Пароли не совпадают!' }
+            return render(self.request, self.template_name, context)
 
-    # def get(self, request, *args, **kwargs):
-    #     form = EmhUserForm()
-    #     return render(request, self.template_name, {'form': form})    
+        user = User.objects.create_user(username, '', password,
+                                        first_name = firstname, last_name = lastname)
+        emh_user = EmhUser(user = user, region = region, about = about)
+        emh_user.save()
+        user.save()
 
-    # def post(self, request, *args, **kwargs):
-    #     form = EmhUserForm(request.POST)
-    #     if form.is_valid:
-    #         user            = request.user
-    #         emh_user        = user.emhuser            
-    #         user.first_name = request.POST['firstname']                                                           
-    #         user.last_name  = request.POST['lastname']                                                                      
-    #         emh_user.age    = request.POST['age']
-    #         emh_user.region = request.POST['region']
-    #         emh_user.about  = request.POST['about']
-    #         emh_user.save()
-    #         user.save()
-    #         return redirect('users:account', username = request.user)
-    #     else:
-    #         return render(request, self.template_name, {'form':form})
+        user_auth = authenticate(username=username, password=password)
+        if user_auth is not None:
+            if user_auth.is_active:
+                login(self.request, user_auth)
+
+        return redirect('users:account', username=username)
+
+    def form_invalid(self, form):
+        pass
+
+class EmhUserView(View):
+    template_name = 'users/profile_edit.html'
+    
+    def get(self, request, *args, **kwargs):
+        form = EmhUserForm
+
+        can_edit = False
+        if request.user and request.user.username == kwargs['username']:
+            can_edit = True
+
+        #todo можно ли вносить изменения в профиль? дял этого нужно знать для какого профиля мы смотрим эту страницу.
+        return render(request, self.template_name, {'form': form, 'can_edit': can_edit})    
+
+    def post(self, request, *args, **kwargs):
+        form = EmhUserForm(request.POST)
+        if form.is_valid:
+            user            = request.user
+            emh_user        = user.emhuser            
+            user.first_name = request.POST['firstname']                                                           
+            user.last_name  = request.POST['lastname']                                                                      
+            emh_user.region = request.POST['region']
+            emh_user.about  = request.POST['about']
+            emh_user.save()
+            user.save()
+            return redirect('users:account', username = request.user)
+        else:
+            return render(request, self.template_name, {'form': form})
 
 
 
@@ -171,7 +179,6 @@ def get_page_wordlist(page_number, word_list, n):
 
 import pdb
 def username_logged(username):
-    # pdb.set_trace()
     users = EmhUser.objects.all()
     names = []
     for u in users:
