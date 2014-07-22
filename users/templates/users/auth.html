@@ -17,7 +17,11 @@
                 </div>
 
                 {% if auth_failed %}
-                    <div class="alert alert-danger">{{ auth_failed }}</div>
+                    <div class="alert alert-danger">
+                    	{% for err in auth_failed %}
+                    	{{ err }}
+                    	{% endfor %}
+                	</div>
                 {% endif %}
 				<form class="form-horizontal" role="form" method="post" action="{% url 'users:auth' %}">
 					{% csrf_token %}

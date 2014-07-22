@@ -13,47 +13,42 @@
 	        <h1>Изменить настройки профиля</h1>
 		</div>
 	</div>
-	{% if can_edit %}
     	<form class="form-horizontal" role="form" method="post" action="{% url 'users:profile_edit' user.username %}">
     		{% csrf_token %}
     		<div class="form-group">
 				<label for="id_firstname" class="col-md-3 control-label">Имя</label>
 			    <div class="col-md-3">
-			      <input type="text" class="form-control" id="id_firstname" name="firstname" value="{{ user.first_name}}">
+			      <input type="text" class="form-control" id="id_firstname" name="first_name" value="{{ userinfo.first_name}}">
 		      	</div>
 	    	</div>
 
 	    	<div class="form-group">
 			    <label for="id_lastname" class="col-md-3 control-label">Фамилия</label>
 			    <div class="col-md-3">
-			      <input type="text" class="form-control" id="id_lastname" name="lastname" value="{{ user.last_name }}">
+			      <input type="text" class="form-control" id="id_lastname" name="last_name" value="{{ userinfo.last_name }}">
 			    </div>
 			</div>
 
 			<div class="form-group">
 			    <label for="id_region" class="col-md-3 control-label">Регион</label>
 			    <div class="col-md-3">
-			      <input type="text" class="form-control" id="id_region" name="region" value="{{ user.emhuser.region }}">
+			      <input type="text" class="form-control" id="id_region" name="region" value="{{ userinfo.emhuser.region }}">
 			    </div>
 			</div>
 
 			<div class="form-group">
 				<label for="id_about" class="col-md-3 control-label">О себе</label>
 				<div class="col-md-3">
-					<textarea rows="5" class="form-control" id="id_about"name="about">{{ user.emhuser.about }}</textarea>
+					<textarea rows="5" class="form-control" id="id_about"name="about">{{ userinfo.emhuser.about }}</textarea>
 				</div>
 			</div>
-
+	{% if can_edit %}
 			<div class="form-group">
 		    	<div class="col-md-offset-3 col-md-3">
 					<input class="btn btn-default" type="submit" value="Сохранить" />
 				</div>
 			</div>
     	</form>    	
-	{% else %}
-		{{ form.first_name }}
-		{{ form.last_name }}
-		<p>bugagaa</p>
 	{% endif %}
 
 

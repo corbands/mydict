@@ -1,7 +1,7 @@
 from django.conf.urls import url, patterns
 
 from users import views
-from users.views import EmhUserView, RegisterView, AuthView
+from users.views import EmhUserView, RegisterView, AuthView, AboutView
 
 urlpatterns = patterns('',
 	url(r'^$', AuthView.as_view(), name='auth'),
@@ -9,7 +9,7 @@ urlpatterns = patterns('',
 
 	url(r'register/$', RegisterView.as_view(), name='register'),
 
-    url(r'about/$', views.about, name='about'),
+    url(r'about/$', views.AboutView.as_view(), name='about'),
 
 	url(r'signout/$', views.signout, name='signout'),
 

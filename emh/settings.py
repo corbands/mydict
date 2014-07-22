@@ -92,3 +92,5 @@ STATICFILES_DIRS = (
 )
 
 LOGIN_URL = 'users:auth'
+
+MEDIA_ROOT = (os.path.join(BASE_DIR, 'emh/media'))

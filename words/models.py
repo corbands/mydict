@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 
 from django.contrib.auth.models import User
@@ -10,7 +11,7 @@ class Word(models.Model):
 	user = models.ForeignKey(User)
 
 	def __unicode__(self):
-		return self.english + ' - ' + self.russian
+		return self.english + u' — ' + self.russian
 
 class Sentence(models.Model):
 	english = models.CharField(max_length=140)
