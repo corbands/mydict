@@ -13,7 +13,7 @@
 	        <h1>Изменить настройки профиля</h1>
 		</div>
 	</div>
-    	<form class="form-horizontal" role="form" method="post" action="{% url 'users:profile_edit' user.username %}">
+    	<form class="form-horizontal" role="form" method="post" action="{% url 'users:profile_edit' user.username %}" enctype="multipart/form-data">
     		{% csrf_token %}
     		<div class="form-group">
 				<label for="id_firstname" class="col-md-3 control-label">Имя</label>
@@ -41,6 +41,16 @@
 				<div class="col-md-3">
 					<textarea rows="5" class="form-control" id="id_about"name="about">{{ userinfo.emhuser.about }}</textarea>
 				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="avatar_id" class="col-md-3 control-label">Фото</label>
+			    <div class="col-md-3">
+			    		{% if userinfo.emhuser.avatar %}
+			    		<img src="{{ MEDIA_URL}}{{ userinfo.emhuser.avatar }}" />
+			    		{% endif %}
+				      	<input type="file" class="form-control" id="avatar_id" name="avatar">
+			    </div>
 			</div>
 	{% if can_edit %}
 			<div class="form-group">

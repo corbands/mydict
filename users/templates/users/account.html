@@ -11,8 +11,8 @@
 	function word_edit(word_id)
 	{
 		console.log(word_id);		
-		url = "{% url 'words:word_edit' 3 %}";
-		url = url.slice(0, url.length-2);
+		url = "{% url 'words:word_edit_template' %}";
+		console.log(url);		
 		url += word_id;
 		document.location = url;
 	}
@@ -22,89 +22,96 @@
 
 	<div class="container">
             
-    	<div class="row">
+		{% if error_msg %}
             <div class="col-md-offset-5">
-
-				{% if error_msg %}
                         <div class="alert alert-danger">{{ error_msg }}</div>
-				{% endif %}
 			</div>
+		{% endif %}
 			
-			<div class="row page-header">		
-			
-				{% if can_edit %}	
-				<div class="col-md-offset-3">
-						<div class="col-md-offset-0">
-							<h4>Новое слово:</h4>
-						</div>
-					<form role="form" method="post" action="{% url 'users:account' user.username%}">
-						{% csrf_token %}
-						<div class="form-group">
-							<!-- <label for="id_english" class="col-md-1 control-label">english</label> -->
-							<!-- <label for="id_english">english</label> -->
-						    <div class="col-md-2">
-						      <input type="text" class="form-control" id="id_english" name="english" placeholder="англ">
-						    </div>
-						</div>
-						<div class="form-group">
-							<!-- <label for="id_russian" class="col-md-1 control-label">russian</label> -->
-						    <div class="col-md-2">
-						      <input type="text" class="form-control" id="id_russian" name="russian" placeholder="рус">
-						    </div>
-						</div>
-	                    
-						<div class="form-group">
-							<div class="col-md-2">
-								<input class="btn btn-default" type="submit" value="Добавить" />
-							</div>
-						</div>
-					</form>				
-				</div>
-				{% endif %}
-				<div class="col-md-offset-9">
-					<div class="col-md-3">
-		                  <h3>{{ emh_user.user.username }}</h3>
-		                  {% if can_edit %}
-		                  <a href="{% url 'users:profile_edit' emh_user.user.username %}">Изменить</a>
-		                  {% endif %}
-		            </div>
-	            </div>
-            </div>
-
-		</div>
-
-		
-
 		<div class="row">
-			<div class="col-md-offset-3 col-md-6">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>Английский</th>
-						<th>Русский</th>
-					</tr>
-				</thead>
-				<tbody>
-				{% for word in word_list %}	
-					<tr onclick="word_edit({{ word.id }})">
-						<td>{{ word.english }}</td>
-						<td>{{ word.russian }}</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
+			<div class="col-md-9">
+				<div class="row">
+				{% if can_edit %}	
+					<div class="col-md-offset-3">
+								<h3>Новое слово:</h3>
+						<form role="form" method="post" action="{% url 'users:account' user.username%}">
+							{% csrf_token %}
+							<div class="form-group">
+								<!-- <label for="id_english" class="col-md-1 control-label">english</label> -->
+								<!-- <label for="id_english">english</label> -->
+							    <div class="col-md-3">
+							      <input type="text" class="form-control" id="id_english" name="english" placeholder="англ">
+							    </div>
+							</div>
+							<div class="form-group">
+								<!-- <label for="id_russian" class="col-md-1 control-label">russian</label> -->
+							    <div class="col-md-3">
+							      <input type="text" class="form-control" id="id_russian" name="russian" placeholder="рус">
+							    </div>
+							</div>
+		                    
+							<div class="form-group">
+								<div class="col-md-3">
+									<input class="btn btn-default" type="submit" value="Добавить" />
+								</div>
+							</div>
+						</form>				
+					</div>
+				{% endif %}
+				</div>
+				
+				<br>
+				<div class="row">
+					<div class="col-md-offset-2 col-md-8">
+						<hr>
+					</div>
+				</div>
+				<br>
 
-			{% for i in pages %}
-				<a href="{% url 'users:account' emh_user.user.username i %}">{{ i }}&nbsp</a>
-			{% endfor %}
+				<div class="row">
+						<div class="col-md-offset-2 col-md-8">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Английский</th>
+								<th>Русский</th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for word in word_list %}	
+							<tr onclick="word_edit({{ word.id }})">
+								<td>{{ word.english }}</td>
+								<td>{{ word.russian }}</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+
+					{% for i in pages %}
+						<a href="{% url 'users:account' emh_user.user.username i %}">{{ i }}&nbsp</a>
+					{% endfor %}
 
 
-		   </div>
-		</div>
+				   </div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="row">
+	            	<img src="{{ MEDIA_URL}}{{ emh_user.avatar }}" />
+            	</div>
+            	<div class="row">
+            		<h3>{{ emh_user.user.username }}</h3>
+                  
+	                  {% if can_edit %}
+	                  <a href="{% url 'users:profile_edit' emh_user.user.username %}">Изменить</a>
+	                  {% endif %}
+            	</div>
+			</div>
+
 	
 	</div>
-
-
+</div>
 
 </body>
 </html>

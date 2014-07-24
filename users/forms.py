@@ -8,6 +8,7 @@ class EmhUserForm(forms.Form):
 	last_name  = forms.CharField(required = False)
 	region     = forms.CharField(required = False)
 	about      = forms.CharField(required = False)
+	avatar     = forms.ImageField(required = False)
 
 
 def ForbiddenUsernameValidator(value):
@@ -19,7 +20,7 @@ def ForbiddenUsernameValidator(value):
 		'campaign', 'config', 'delete', 'remove', 'forum', 'forums', 'download', 'downloads', 
 		'contact', 'blogs', 'feed', 'feeds', 'faq', 'intranet', 'log', 'registration', 'search', 
 		'explore', 'rss', 'support', 'status', 'static', 'media', 'setting', 'css', 'js',
-		'follow', 'activity', 'questions', 'articles', 'network',]
+		'follow', 'activity', 'questions', 'articles', 'network', 'word',]
 
 	if value.lower() in forbidden_usernames:
 		raise ValidationError('This is a reserved word.')

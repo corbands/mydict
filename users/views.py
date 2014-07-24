@@ -17,14 +17,18 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView
 
+from django.core.files import File
 
+from PIL import Image, ImageOps
+
+from emh.settings import MEDIA_ROOT
 from words.models import Word
 from users.models import EmhUser
 from users.forms import EmhUserForm, EmhUserRegisterForm, MyAuthForm
 
 class AuthView(FormView):
     template_name = 'users/auth.html'
-    form_class = MyAuthForm
+    form_class    = MyAuthForm
 
     def form_valid(self, form):
         login(self.request, form.user_cache)
@@ -36,7 +40,7 @@ class AuthView(FormView):
 
 @login_required
 def account(request, username='', page_number=1):
-    if username and not username_logged(username):
+    if username and not get_user(username):
         raise Http404
 
     page_number = int(page_number)
@@ -76,9 +80,7 @@ def signout(request):
 class AboutView(TemplateView):
     template_name = 'users/about.html'
 
-# def about(request):
-    # return render(request, 'users/about.html')
-
+# todo можно использовать ModeLForm
 class RegisterView(FormView):
     template_name = 'users/register.html'
     form_class = EmhUserRegisterForm
@@ -99,6 +101,12 @@ class RegisterView(FormView):
         user = User.objects.create_user(username, '', password,
                                         first_name = firstname, last_name = lastname)
         emh_user = EmhUser(user = user, region = region, about = about)
+
+        if 'avatar' not in self.request.FILES:
+            self.save_default_avatar(emh_user)
+        else:
+            save_avatar(user, self.request)
+
         emh_user.save()
         user.save()
 
@@ -110,7 +118,21 @@ class RegisterView(FormView):
         return redirect('users:account', username=username)
 
     def form_invalid(self, form):
-        pass
+        context = {'form': form}
+        return render(self.request, self.template_name, context)
+
+    def save_default_avatar(self, emh_user):
+        default_avatar = MEDIA_ROOT + '/default_avatar.jpg'
+        image = Image.open(default_avatar)
+        if image.mode not in ("L", "RGB"):
+            image = image.convert("RGB")
+
+        imagefit = ImageOps.fit(image, (160, 160))
+        imagefit.save(default_avatar, 'JPEG', quality=75)
+
+        img_file = open(default_avatar, 'r')
+        emh_user.avatar.save('default_avatar.jpg', File(img_file))
+        img_file.close()
 
 # todo можно использовать ModelForm
 class EmhUserView(View):
@@ -127,21 +149,22 @@ class EmhUserView(View):
         return render(request, self.template_name, {'form': form, 'userinfo':userinfo, 'can_edit': can_edit})    
 
     def post(self, request, *args, **kwargs):
-        form = EmhUserForm(request.POST)
+        form = EmhUserForm(request.POST, request.FILES)
         if form.is_valid():
             user            = request.user
             emh_user        = user.emhuser                        
             user.first_name = form.cleaned_data['first_name']                                                           
             user.last_name  = form.cleaned_data['last_name']                                                                      
             emh_user.region = form.cleaned_data['region']
-            emh_user.about  = form.cleaned_data['about']            
-            user.save()
+            emh_user.about  = form.cleaned_data['about']
+
+            save_avatar(user, request)
+            
             emh_user.save()
+            user.save()
             return redirect('users:account', username = request.user)
         else:
             return render(request, self.template_name, {'form': form})
-
-
 
 #---------------------------
 #private methods
@@ -160,19 +183,34 @@ def get_page_wordlist(page_number, word_list, n):
 
     return [beg, end]
 
-def username_logged(username):
-    users = EmhUser.objects.all()
-    names = []
-    for u in users:
-        names.append(u.user.username)
-
-    return username in names
-
 def get_user(username):
-    users = EmhUser.objects.all()
-    names = []
-    for u in users:
-        if u.user.username == username:
-            return u.user
+    return EmhUser.objects.get(user__username__iexact = username).user
 
-    return None
+def handle_uploaded_file(file):    
+
+    destination = open(MEDIA_ROOT + "/" + file.name, 'wb+')
+    for chunk in file.chunks():
+        destination.write(chunk)
+
+    destination.flush() 
+
+    image = Image.open(destination.name)
+    if image.mode not in ("L", "RGB"):
+        image = image.convert("RGB")
+
+    # image = image.resize((200, 200), Image.ANTIALIAS)
+    # image.save(destination.name, 'JPEG', quality=75)
+
+    imagefit = ImageOps.fit(image, (160, 160))
+    imagefit.save(destination.name, 'JPEG', quality=75)
+
+    return destination
+
+def save_avatar(user, request):
+    img = handle_uploaded_file(request.FILES['avatar'])
+    frm = img.name.split('.')
+    ava_name = user.username + '.' + frm[-1]
+
+    emh_user = user.emhuser
+    emh_user.avatar.save(ava_name, File(img))
+    img.close()

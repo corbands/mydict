@@ -1,1 +1,5 @@
+gitignore
 *.pyc
+db.*
+media
+*migrations*

@@ -13,10 +13,10 @@ urlpatterns = patterns('',
 
 	url(r'signout/$', views.signout, name='signout'),
 
-	url(r'user/(?P<username>\w+)/settings/$', EmhUserView.as_view(), name='profile_edit'),
+	url(r'(?P<username>\w+)/settings/$', EmhUserView.as_view(), name='profile_edit'),
 	# url(r'user/settings/$', EmhUserView.as_view(), name='profile_edit'),
 
-    url(r'user/(?P<username>\w+)$', views.account, name='account'),
-    url(r'user/(?P<username>\w+)/$', views.account, name='account'),
-    url(r'user/(?P<username>\w+)/(?P<page_number>\d+)$', views.account, name='account'),
+    url(r'(?P<username>\w+)/(?P<page_number>\d+)$', views.account, name='account'),
+    url(r'(?P<username>\w+)$', views.account, name='account'),
+    url(r'(?P<username>\w+)/$', views.account, name='account'),
 	)
