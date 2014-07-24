@@ -1,19 +1,18 @@
 from django.contrib import admin
 
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.admin import User
 
-from users.models import EmhUser
+from users.models import User
 
-class EmhUserInline(admin.StackedInline):
-    model = EmhUser
+class UserInline(admin.StackedInline):
+    model = User
     can_delete = False
-    verbose_name_plural = "emh_user"
+    verbose_name_plural = "user"
 
 
 class UserAdmin(UserAdmin):
-    inlines = (EmhUserInline, )
+    inlines = (UserInline, )
 
 
-admin.site.unregister(User)
+# admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

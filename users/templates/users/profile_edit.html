@@ -18,36 +18,36 @@
     		<div class="form-group">
 				<label for="id_firstname" class="col-md-3 control-label">Имя</label>
 			    <div class="col-md-3">
-			      <input type="text" class="form-control" id="id_firstname" name="first_name" value="{{ userinfo.first_name}}">
+			      <input type="text" class="form-control" id="id_firstname" name="first_name" value="{{ userdata.first_name}}">
 		      	</div>
 	    	</div>
 
 	    	<div class="form-group">
 			    <label for="id_lastname" class="col-md-3 control-label">Фамилия</label>
 			    <div class="col-md-3">
-			      <input type="text" class="form-control" id="id_lastname" name="last_name" value="{{ userinfo.last_name }}">
+			      <input type="text" class="form-control" id="id_lastname" name="last_name" value="{{ userdata.last_name }}">
 			    </div>
 			</div>
 
 			<div class="form-group">
 			    <label for="id_region" class="col-md-3 control-label">Регион</label>
 			    <div class="col-md-3">
-			      <input type="text" class="form-control" id="id_region" name="region" value="{{ userinfo.emhuser.region }}">
+			      <input type="text" class="form-control" id="id_region" name="region" value="{{ userdata.region }}">
 			    </div>
 			</div>
 
 			<div class="form-group">
 				<label for="id_about" class="col-md-3 control-label">О себе</label>
 				<div class="col-md-3">
-					<textarea rows="5" class="form-control" id="id_about"name="about">{{ userinfo.emhuser.about }}</textarea>
+					<textarea rows="5" class="form-control" id="id_about"name="about">{{ userdata.about }}</textarea>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="avatar_id" class="col-md-3 control-label">Фото</label>
 			    <div class="col-md-3">
-			    		{% if userinfo.emhuser.avatar %}
-			    		<img src="{{ MEDIA_URL}}{{ userinfo.emhuser.avatar }}" />
+			    		{% if userdata.avatar %}
+			    		<img src="{{ MEDIA_URL}}{{ userdata.avatar }}" />
 			    		{% endif %}
 				      	<input type="file" class="form-control" id="avatar_id" name="avatar">
 			    </div>

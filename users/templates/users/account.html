@@ -34,7 +34,7 @@
 				{% if can_edit %}	
 					<div class="col-md-offset-3">
 								<h3>Новое слово:</h3>
-						<form role="form" method="post" action="{% url 'users:account' user.username%}">
+						<form role="form" method="post" action="{% url 'users:account' userdata.username%}">
 							{% csrf_token %}
 							<div class="form-group">
 								<!-- <label for="id_english" class="col-md-1 control-label">english</label> -->
@@ -87,24 +87,19 @@
 						</tbody>
 					</table>
 
-					{% for i in pages %}
-						<a href="{% url 'users:account' emh_user.user.username i %}">{{ i }}&nbsp</a>
-					{% endfor %}
-
-
 				   </div>
 				</div>
 			</div>
 
 			<div class="col-md-3">
 				<div class="row">
-	            	<img src="{{ MEDIA_URL}}{{ emh_user.avatar }}" />
+	            	<img src="{{ MEDIA_URL}}{{ userdata.avatar }}" />
             	</div>
             	<div class="row">
-            		<h3>{{ emh_user.user.username }}</h3>
+            		<h3>{{ userdata.username }}</h3>
                   
 	                  {% if can_edit %}
-	                  <a href="{% url 'users:profile_edit' emh_user.user.username %}">Изменить</a>
+	                  <a href="{% url 'users:profile_edit' userdata.username %}">Изменить</a>
 	                  {% endif %}
             	</div>
 			</div>

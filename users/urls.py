@@ -1,7 +1,7 @@
 from django.conf.urls import url, patterns
 
 from users import views
-from users.views import EmhUserView, RegisterView, AuthView, AboutView
+from users.views import EditProfileView, RegisterView, AuthView, AboutView, AccountView
 
 urlpatterns = patterns('',
 	url(r'^$', AuthView.as_view(), name='auth'),
@@ -13,10 +13,7 @@ urlpatterns = patterns('',
 
 	url(r'signout/$', views.signout, name='signout'),
 
-	url(r'(?P<username>\w+)/settings/$', EmhUserView.as_view(), name='profile_edit'),
-	# url(r'user/settings/$', EmhUserView.as_view(), name='profile_edit'),
+	url(r'(?P<username>\w+)/settings/$', EditProfileView.as_view(), name='profile_edit'),
 
-    url(r'(?P<username>\w+)/(?P<page_number>\d+)$', views.account, name='account'),
-    url(r'(?P<username>\w+)$', views.account, name='account'),
-    url(r'(?P<username>\w+)/$', views.account, name='account'),
+    url(r'(?P<username>\w+)/$', AccountView.as_view(), name='account'),
 	)

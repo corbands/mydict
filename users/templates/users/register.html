@@ -16,7 +16,11 @@
                 </div>
 
                 {% if register_failed %}
-                    <div class="alert alert-danger">{{ register_failed }}</div>
+                    <div class="alert alert-danger">
+                    	{% for err in register_failed %}
+                    	{{ err }}
+                    	{% endfor %}
+                	</div>
                 {% endif %}
 
 				<form class="form-horizontal" role="form" method="post" action="{% url 'users:register' %}" enctype="multipart/form-data">
@@ -27,7 +31,7 @@
 					    <div class="col-md-3">
 					      <input type="text" class="form-control" id="input_login" name="username">
 					    </div>
-					</div>
+					</div>				
 
 					<div class="form-group">
 						<label for="input_password" class="col-md-3 control-label">Пароль</label>
@@ -40,6 +44,13 @@
 						<label for="input_password2" class="col-md-3 control-label">Пароль (подтверждение)</label>
 					    <div class="col-md-3">
 					      <input type="password" class="form-control" id="input_password2" name="password2">
+					    </div>
+					</div>
+
+					<div class="form-group">
+						<label for="input_email" class="col-md-3 control-label">Почта</label>
+					    <div class="col-md-3">
+					      <input type="text" class="form-control" id="input_email" name="email">
 					    </div>
 					</div>
 

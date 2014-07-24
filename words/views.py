@@ -7,7 +7,13 @@ from words.models import Word
 
 def word_edit(request, word_id):
 	word = get_object_or_404(Word, pk=word_id)
-	return render(request, 'words/word_edit.html', {'word': word})
+
+	if request.user == word.user:
+		can_edit = True
+	else:
+		can_edit = False
+
+	return render(request, 'words/word_edit.html', {'word': word, 'can_edit':can_edit})
 
 def word_edited(request, word_id):
 	if request.POST.__contains__('save'):
@@ -19,8 +25,4 @@ def word_edited(request, word_id):
 		word = get_object_or_404(Word, pk=word_id)
 		word.delete()
 
-#	latest_word_list = Word.objects.order_by('-pub_date')[:10]
-#	context = { 'latest_word_list': latest_word_list }
-	
-	# return HttpResponseRedirect(reverse('users:account', username=request.user.username))
 	return redirect('users:account', username = request.user.username)

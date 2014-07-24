@@ -14,8 +14,10 @@
         <h1>{{ word }}</h1>
 
         <p>{{ word.pub_date }}</p>
-
-        {% if error_message %} <p><strong>{{ error_message }}</strong></p> {% endif %}
+        <p>Автор: <a href="{% url 'users:account' word.user.username %}">{{ word.user.username }}</a></p>
+        {% if error_message %} 
+            <p><strong>{{ error_message }}</strong></p>
+        {% endif %}
 
 
         <form class="form-horizontal" action="{% url 'words:word_edited' word.id %}" method="post">
@@ -37,13 +39,15 @@
 
             <br />
 
-            <div class="col-md-offset-1 col-md-2">
-                <input type="submit" class="btn btn-default" name="save" value="Сохранить">
-            </div>
+            {% if can_edit %}
+                <div class="col-md-offset-1 col-md-2">
+                    <input type="submit" class="btn btn-default" name="save" value="Сохранить">
+                </div>
 
-            <div class="col-md-2">
-                <input type="submit" class="btn btn-default" name="delete" value="Удалить" />
-            </div>
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-default" name="delete" value="Удалить" />
+                </div>
+            {% endif %}
         </form>
     </div>
 </div>
