@@ -41,7 +41,7 @@ class AccountView(View):
     В этом view отображается список слов пользователя
     """
     def post(self, request, *args, **kwargs):
-        username = kwargs['username']
+        username = kwargs.get('username')
 
         en = request.POST['english']
         ru = request.POST['russian']
@@ -52,7 +52,10 @@ class AccountView(View):
         return redirect('users:account', username = username)
 
     def get(self, request, *args, **kwargs):
-        username = kwargs['username']
+        username = kwargs.get('username')
+        if not username:
+            username = request.user.username
+            
         user = get_user(username)    
 
         if username and not user:

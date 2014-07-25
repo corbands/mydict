@@ -4,7 +4,7 @@ from users import views
 from users.views import EditProfileView, RegisterView, AuthView, AboutView, AccountView
 
 urlpatterns = patterns('',
-	url(r'^$', AuthView.as_view(), name='auth'),
+	url(r'^$', AccountView.as_view()),
 	url(r'auth/$', AuthView.as_view(), name='auth'),
 
 	url(r'register/$', RegisterView.as_view(), name='register'),
