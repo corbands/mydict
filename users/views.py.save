@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*f- coding: utf-8 -*-
 import pdb
 
 from django.http import Http404
@@ -147,7 +147,7 @@ class EditProfileView(View):
             user.first_name = form.cleaned_data['first_name']                                                           
             user.last_name  = form.cleaned_data['last_name']                                                                      
 
-            
+            pdb.set_trace()
             user.region     = form.cleaned_data['region']
             user.about      = form.cleaned_data['about']
 
