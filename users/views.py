@@ -112,7 +112,7 @@ class RegisterView(FormView):
         return render(self.request, self.template_name, context)
 
     def save_default_avatar(self, user):
-        default_avatar = MEDIA_ROOT + '/default_avatar.jpg'
+        default_avatar = MEDIA_ROOT + '/default.jpg'
         image = Image.open(default_avatar)
         if image.mode not in ("L", "RGB"):
             image = image.convert("RGB")
