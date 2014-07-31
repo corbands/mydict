@@ -16,6 +16,7 @@ def word_edit(request, word_id):
 	return render(request, 'words/word_edit.html', {'word': word, 'can_edit':can_edit})
 
 def word_edited(request, word_id):
+	# TODO: вместо request post вынести всё в forms. перевести на CBV views
 	if request.POST.__contains__('save'):
 		word = get_object_or_404(Word, pk=word_id)
 		word.english = request.POST['english'];

@@ -60,7 +60,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'emhdb',
-        'USER': 'corbanps',
+        'USER': 'corban',
         'PASSWORD': 'asd',
         'HOST': '127.0.0.1',
         'PORT': '5432',

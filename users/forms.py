@@ -28,9 +28,7 @@ def InvalidUsernameValidator(value):
 
 
 class RegisterForm(forms.ModelForm):
-	"""
-	Форма регистрации пользователя "Словарика"
-	"""
+	
 	password = forms.CharField(widget = forms.PasswordInput())
 	password2 = forms.CharField(widget = forms.PasswordInput())
 
@@ -66,9 +64,6 @@ class RegisterForm(forms.ModelForm):
 
 
 class EditProfileForm(forms.ModelForm):
-	"""
-	Форма изменения профиля пользователя
-	"""
 	class Meta:
 		model = User
 		fields = [ 'first_name', 'last_name',
@@ -76,9 +71,6 @@ class EditProfileForm(forms.ModelForm):
 
 
 class MyAuthForm(AuthenticationForm):
-	"""
-	Форма аутентификации пользователя "Словарика"
-	"""
 
 	username = forms.CharField(max_length=254, error_messages = {'required': u'Поле "Логин" должно быть заполнено'})
 	password = forms.CharField(label=("Password"), widget=forms.PasswordInput, error_messages = {u'required': u'Поле "Пароль" должно быть заполнено'})

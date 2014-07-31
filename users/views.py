@@ -44,6 +44,7 @@ class AccountView(View):
     def post(self, request, *args, **kwargs):
         username = kwargs.get('username')
 
+        # TODO: вынести обработку в forms.py
         en = request.POST['english']
         ru = request.POST['russian']
 
@@ -166,13 +167,13 @@ def signout(request):
 
 
 #---------------------------
-#private methods
+# other methods
 #---------------------------
 def get_user(username):
     try:	
         return User.objects.get(username__iexact = username)
     except ObjectDoesNotExist:
-	return None
+        return None
 
 def handle_uploaded_file(file):    
 

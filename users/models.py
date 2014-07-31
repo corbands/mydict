@@ -4,9 +4,6 @@ from django.contrib.auth.models import AbstractUser as _AbstractUser, UserManage
 
 
 class UserManager(_UserManager):
-	"""
-	Менеджер модели пользователя "Словарика"
-	"""
 	def register(self, username, password, email, first_name, last_name, region, about, **extra_fields):
 
 		#todo здесь нужно будет добавить проверку на уникальность email
@@ -24,9 +21,6 @@ class UserManager(_UserManager):
 
 
 class AbstractUser(_AbstractUser):
-	"""
-	Абстракция модели пользователя "Словарика"
-	"""
 	region  = models.CharField(max_length = 50, null = True, blank = True)
 	about   = models.TextField(null = True, default = '', blank = True)
 	avatar  = models.ImageField(upload_to = 'avatars', blank = True)
@@ -38,7 +32,4 @@ class AbstractUser(_AbstractUser):
 
 
 class User(AbstractUser):
-	"""
-	Модель пользователя "Словарика"
-	"""
 	pass
