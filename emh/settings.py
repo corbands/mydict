@@ -106,3 +106,5 @@ STATIC_ROOT = (os.path.join(BASE_DIR, 'emh/static_root/'))
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.User'
+
+WORDS_COUNT_ON_PAGE = 5

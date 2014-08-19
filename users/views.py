@@ -16,10 +16,12 @@ from django.views.generic.edit import FormView
 
 from django.core.files import File
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from PIL import Image, ImageOps
 
 from emh.settings import MEDIA_ROOT
+from emh import settings
 from words.models import Word
 from users.models import User
 
@@ -65,6 +67,16 @@ class AccountView(View):
         
         word_list = user.word_set.values()
         can_edit = username == request.user.username
+
+        paginator = Paginator(word_list, settings.WORDS_COUNT_ON_PAGE)
+        page = request.GET.get('page')
+        try:
+        	words = paginator.page(page)
+    	except PageNotAnInteger:
+    		words = paginator.page(1)
+        except EmptyPage:
+    		words = paginator.page(paginator.num_pages)
+
         context = {'userdata':user, 'word_list':word_list, 'can_edit':can_edit}
         return render(request, 'users/account.html', context)
 
