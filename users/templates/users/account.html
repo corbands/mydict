@@ -69,7 +69,7 @@
 				<br>
 
 				<div class="row">
-						<div class="col-md-offset-2 col-md-8">
+					<div class="col-md-offset-2 col-md-8">
 					<table class="table table-hover">
 						<thead>
 							<tr>
@@ -78,7 +78,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						{% for word in word_list %}	
+						{% for word in words %}	
 							<tr onclick="word_edit({{ word.id }})">
 								<td>{{ word.english }}</td>
 								<td>{{ word.russian }}</td>
@@ -89,6 +89,25 @@
 
 				   </div>
 				</div>
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+					<div class="pagination">
+						<span class="step-links">
+							{% for page in words.paginator.page_range %}
+							{% if page != words.number %}
+								<a href="?page={{ page }}">&nbsp{{page}}&nbsp</a>
+							{% else %}
+								<span class="current">
+					            	{{ page }}
+					        	</span>
+							{% endif %}
+							{% endfor %}
+
+						</span>
+					</div>
+				</div>
+			</div>
+
 			</div>
 
 			<div class="col-md-3">

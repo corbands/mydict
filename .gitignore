@@ -3,3 +3,4 @@ gitignore
 db.*
 media
 *migrations*
+local.txt

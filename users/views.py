@@ -57,6 +57,7 @@ class AccountView(View):
 
     def get(self, request, *args, **kwargs):
         username = kwargs.get('username')
+        
         if not username:
             username = request.user.username
             
@@ -77,7 +78,7 @@ class AccountView(View):
         except EmptyPage:
     		words = paginator.page(paginator.num_pages)
 
-        context = {'userdata':user, 'word_list':word_list, 'can_edit':can_edit}
+        context = {'userdata':user, 'words':words, 'can_edit':can_edit}
         return render(request, 'users/account.html', context)
 
 class AboutView(TemplateView):
