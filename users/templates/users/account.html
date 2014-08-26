@@ -16,6 +16,50 @@
 		url += word_id;
 		document.location = url;
 	}
+
+	function translate_en_ru()
+	{		
+		key = 'key=trnsl.1.1.20140826T173319Z.f0d02f67d87ec71e.3304789dcff38b6b7253e6835b06bd3bb868a851';
+		word = $('#id_english').val();
+		text = 'text='+word;
+		lang='lang=en-ru';
+
+		$.ajax({
+			url: 'https://translate.yandex.net/api/v1.5/tr.json/translate',
+			type: 'GET',
+			data: key+'&'+text+'&'+lang,
+			success: function(res) {$('#id_russian').val(res.text);}
+		})				
+	}
+
+	function translate_ru_en()
+	{
+		key = 'key=trnsl.1.1.20140826T173319Z.f0d02f67d87ec71e.3304789dcff38b6b7253e6835b06bd3bb868a851';
+		word = $('#id_russian').val();
+		text = 'text='+word;
+		lang='lang=ru-en';
+
+		$.ajax({
+			url: 'https://translate.yandex.net/api/v1.5/tr.json/translate',
+			type: 'GET',
+			data: key+'&'+text+'&'+lang,
+			success: function(res) {$('#id_english').val(res.text);}
+		})
+		
+	}
+
+	function translate_en_ru_key(e)
+	{
+		if (e.keyCode == 10)
+			translate_en_ru();
+	}
+
+	function translate_ru_en_key(e)
+	{
+		if (e.keyCode == 10)
+			translate_ru_en();
+	}
+
 </script>
 
     {% include 'emh/include/navbar.html' %}
@@ -30,23 +74,20 @@
 			
 		<div class="row">
 			<div class="col-md-9">
-				<div class="row">
 				{% if can_edit %}	
+				<div class="row">
 					<div class="col-md-offset-3">
 								<h3>Новое слово:</h3>
 						<form role="form" method="post" action="{% url 'users:account' userdata.username%}">
 							{% csrf_token %}
 							<div class="form-group">
-								<!-- <label for="id_english" class="col-md-1 control-label">english</label> -->
-								<!-- <label for="id_english">english</label> -->
 							    <div class="col-md-3">
-							      <input type="text" class="form-control" id="id_english" name="english" placeholder="англ" autofocus>
+							      <input type="text" class="form-control" id="id_english" name="english" placeholder="англ" autofocus onkeypress="translate_en_ru_key(event)">
 							    </div>
 							</div>
 							<div class="form-group">
-								<!-- <label for="id_russian" class="col-md-1 control-label">russian</label> -->
 							    <div class="col-md-3">
-							      <input type="text" class="form-control" id="id_russian" name="russian" placeholder="рус">
+							      <input type="text" class="form-control" id="id_russian" name="russian" placeholder="рус" onkeypress="translate_ru_en_key(event)">
 							    </div>
 							</div>
 		                    
@@ -57,8 +98,8 @@
 							</div>
 						</form>				
 					</div>
-				{% endif %}
 				</div>
+				{% endif %}
 				
 				<br>
 				<div class="row">
@@ -125,7 +166,11 @@
 
 	
 	</div>
+	<div class="row">
+		<div class="col-md-offset-10"
+			<p>Переведено сервисом <a href="http://translate.yandex.ru/">«Яндекс.Перевод»</a></p>
+		</div>
+	</div>
 </div>
-
 </body>
 </html>
