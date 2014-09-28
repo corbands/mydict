@@ -19,11 +19,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'p^j)u(bn3@kfm(=$ms%n56x&u(fn_y6@*i1^7$mdgu0n#!h1d_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -107,4 +107,4 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.User'
 
-WORDS_COUNT_ON_PAGE = 5
+WORDS_COUNT_ON_PAGE = 16

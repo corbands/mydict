@@ -66,8 +66,8 @@ class AccountView(View):
         if not user:
             return redirect('users:auth')
         
-        word_list = user.word_set.values()
-        can_edit = username == request.user.username
+        word_list = user.word_set.order_by('-id').values()
+	can_edit = username == request.user.username
 
         paginator = Paginator(word_list, settings.WORDS_COUNT_ON_PAGE)
         page = request.GET.get('page')

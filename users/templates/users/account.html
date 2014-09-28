@@ -50,13 +50,13 @@
 
 	function translate_en_ru_key(e)
 	{
-		if (e.keyCode == 10)
+		if (e.keyCode == 13 && e.ctrlKey)
 			translate_en_ru();
 	}
 
 	function translate_ru_en_key(e)
 	{
-		if (e.keyCode == 10)
+		if (e.keyCode == 13 && e.ctrlKey)
 			translate_ru_en();
 	}
 
@@ -82,12 +82,12 @@
 							{% csrf_token %}
 							<div class="form-group">
 							    <div class="col-md-3">
-							      <input type="text" class="form-control" id="id_english" name="english" placeholder="англ" autofocus onkeypress="translate_en_ru_key(event)">
+							      <input type="text" class="form-control" id="id_english" name="english" placeholder="англ" autofocus onkeydown="translate_en_ru_key(event)">
 							    </div>
 							</div>
 							<div class="form-group">
 							    <div class="col-md-3">
-							      <input type="text" class="form-control" id="id_russian" name="russian" placeholder="рус" onkeypress="translate_ru_en_key(event)">
+							      <input type="text" class="form-control" id="id_russian" name="russian" placeholder="рус" onkeydown="translate_ru_en_key(event)">
 							    </div>
 							</div>
 		                    
