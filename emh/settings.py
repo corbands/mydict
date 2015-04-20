@@ -59,9 +59,9 @@ WSGI_APPLICATION = 'emh.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'emhdb',
-        'USER': 'corbanps',
-        'PASSWORD': 'asd',
+        'NAME': 'emh_db',
+        'USER': 'corban',
+        'PASSWORD': 'tomemh',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
