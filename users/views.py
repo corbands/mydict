@@ -94,18 +94,17 @@ class RegisterView(FormView):
         password2 = form.cleaned_data.get('password2')
         email     = form.cleaned_data.get('email')
         region    = form.cleaned_data.get('region')
-        firstname = form.cleaned_data.get('first_name')
-        lastname  = form.cleaned_data.get('last_name')
+        first_name = form.cleaned_data.get('first_name')
+        last_name  = form.cleaned_data.get('last_name')
         about     = form.cleaned_data.get('about')
 
-        user = User.objects.register(username = username,
-                            password   = password,
-                            email      = email,
-                            first_name = firstname,
-                            last_name  = lastname,
-                            region     = region,
-                            about      = about)
-            
+        user = self.create_user(username   = username,
+                                password   = password,
+                                email      = email,
+                                first_name = first_name,
+                                last_name  = last_name,
+                                region     = region,
+                                about      = about)
 
         if 'avatar' not in self.request.FILES:
             self.save_default_avatar(user)

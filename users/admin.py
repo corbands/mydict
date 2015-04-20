@@ -1,7 +1,5 @@
 from django.contrib import admin
-
 from django.contrib.auth.admin import UserAdmin
-
 from users.models import User
 
 class UserInline(admin.StackedInline):
@@ -12,7 +10,3 @@ class UserInline(admin.StackedInline):
 
 class UserAdmin(UserAdmin):
     inlines = (UserInline, )
-
-
-# admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
