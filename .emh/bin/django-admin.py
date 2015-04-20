@@ -1,4 +1,4 @@
-#!/var/apps/emh/.emh/bin/python
+#!/home/sryzhov/devel/django/emh/.emh/bin/python
 from django.core import management
 
 if __name__ == "__main__":

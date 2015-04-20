@@ -6,8 +6,8 @@ from __future__ import unicode_literals
 # The *_FORMAT strings use the Django date format syntax,
 # see http://docs.djangoproject.com/en/dev/ref/templates/builtins/#date
 DATE_FORMAT = r'Y \m. E j \d.'
-TIME_FORMAT = 'H:i'
-DATETIME_FORMAT = r'Y \m. E j \d., H:i'
+TIME_FORMAT = 'H:i:s'
+DATETIME_FORMAT = r'Y \m. E j \d., H:i:s'
 YEAR_MONTH_FORMAT = r'Y \m. F'
 MONTH_DAY_FORMAT = r'E j \d.'
 SHORT_DATE_FORMAT = 'Y-m-d'
@@ -17,7 +17,7 @@ FIRST_DAY_OF_WEEK = 1  # Monday
 # The *_INPUT_FORMATS strings use the Python strftime format syntax,
 # see http://docs.python.org/library/datetime.html#strftime-strptime-behavior
 DATE_INPUT_FORMATS = (
-    '%Y-%m-%d', '%d.%m.%Y', '%d.%m.%y',  # '2006-10-25', '25.10.2006', '25.10.06'
+    '%Y-%m-%d', '%d.%m.%Y', '%d.%m.%y', # '2006-10-25', '25.10.2006', '25.10.06'
 )
 TIME_INPUT_FORMATS = (
     '%H:%M:%S',     # '14:30:59'

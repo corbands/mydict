@@ -159,8 +159,6 @@ class EditProfileView(View):
             user            = request.user
             user.first_name = form.cleaned_data['first_name']                                                           
             user.last_name  = form.cleaned_data['last_name']                                                                      
-
-            
             user.region     = form.cleaned_data['region']
             user.about      = form.cleaned_data['about']
 

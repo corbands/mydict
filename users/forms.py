@@ -4,7 +4,8 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 
-from users.models import User
+from users.models import UserProfile
+
 
 def ForbiddenUsernameValidator(value):
 	forbidden_usernames = ['admin', 'settings', 'news', 'about', 'help', 'signin', 'signup', 
@@ -28,46 +29,51 @@ def InvalidUsernameValidator(value):
 
 
 class RegisterForm(forms.ModelForm):
-	
-	password = forms.CharField(widget = forms.PasswordInput())
-	password2 = forms.CharField(widget = forms.PasswordInput())
+  username = forms.CharField(max_length=64)  
+  password = forms.CharField(widget = forms.PasswordInput())
+  password2 = forms.CharField(widget = forms.PasswordInput())
+  email = forms.EmailField()
+  first_name = forms.CharField(max_length=64)
+  last_name = forms.CharField(max_length=64)
+  region = forms.CharField(max_length=64)
+  about = forms.CharField(max_length=64)
 
-	class Meta:
-		model = User
-		fields = ['username', 'email', 'first_name', 'last_name',
-				  'region', 'about', 'avatar']
+  class Meta:
+    model = UserProfile
 
-  	def __init__(self, *args, **kwargs):
-  		super(RegisterForm, self).__init__(*args, **kwargs)
-  		self.fields['username'].validators.append(ForbiddenUsernameValidator)
-  		self.fields['username'].validators.append(InvalidUsernameValidator)
+  def __init__(self, *args, **kwargs):
+    super(RegisterForm, self).__init__(*args, **kwargs)
+    self.fields['username'].validators.append(ForbiddenUsernameValidator)
+    self.fields['username'].validators.append(InvalidUsernameValidator)
 
-  	# todo clean fields дополнить какие нужны будут при валидации
-  	def clean_email(self):
-  		email = self.cleaned_data.get('email')
+  # todo clean fields дополнить какие нужны будут при валидации
+  def clean_email(self):
+    email = self.cleaned_data.get('email')
 
-  		# if not email:
-  			# raise ValidationError('please enter the email')
+    # if not email:
+      # raise ValidationError('please enter the email')
 
-		# if User.objects.filter(email__iexact = email).count() > 0:
-			# raise ValidationError('user with this email already registered')			
-		return email
+    # if User.objects.filter(email__iexact = email).count() > 0:
+    # raise ValidationError('user with this email already registered')			
+    return email
 
-	def clean_password2(self):
-		password2 = self.cleaned_data.get('password2')
+  def clean_password2(self):
+    password2 = self.cleaned_data.get('password2')
 
-		if 'password' in self.cleaned_data and \
-				self.cleaned_data.get('password') != password2:
-			raise forms.ValidationError(u"Пароли не совпадают")
+    if 'password' in self.cleaned_data and \
+      self.cleaned_data.get('password') != password2:
+      raise forms.ValidationError(u"Пароли не совпадают")
 
-		return password2
+    return password2
 
 
 class EditProfileForm(forms.ModelForm):
-	class Meta:
-		model = User
-		fields = [ 'first_name', 'last_name',
-				  'region', 'about', 'avatar']
+  first_name = forms.CharField(max_length=64)
+  second_name = forms.CharField(max_length=64)
+
+  class Meta:
+		model = UserProfile
+		fields = ['region', 'about']
 
 
 class MyAuthForm(AuthenticationForm):
@@ -81,4 +87,4 @@ class MyAuthForm(AuthenticationForm):
     }
 
 	def __init__(self, *args, **kwargs):
-		super(MyAuthForm, self).__init__(*args, **kwargs)
+	    super(MyAuthForm, self).__init__(*args, **kwargs)

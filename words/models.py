@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-
 from users.models import User
+
 
 class Word(models.Model):
 	english = models.CharField(max_length=50)

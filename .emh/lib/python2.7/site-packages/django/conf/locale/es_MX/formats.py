@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 
 DATE_FORMAT = r'j \d\e F \d\e Y'
-TIME_FORMAT = 'H:i'
+TIME_FORMAT = 'H:i:s'
 DATETIME_FORMAT = r'j \d\e F \d\e Y \a \l\a\s H:i'
 YEAR_MONTH_FORMAT = r'F \d\e Y'
 MONTH_DAY_FORMAT = r'j \d\e F'
@@ -24,5 +24,5 @@ DATETIME_INPUT_FORMATS = (
     '%d/%m/%y %H:%M',
 )
 DECIMAL_SEPARATOR = '.'   # ',' is also official (less common): NOM-008-SCFI-2002
-THOUSAND_SEPARATOR = '\xa0'  # non-breaking space
+THOUSAND_SEPARATOR = '\xa0' # non-breaking space
 NUMBER_GROUPING = 3

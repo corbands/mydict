@@ -1,4 +1,4 @@
-Emglish-memory-helper
+English-memory-helper
 ===
 
 Веб-сервис, который выполняет функции англо-русского словарика.

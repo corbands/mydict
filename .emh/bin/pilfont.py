@@ -1,4 +1,4 @@
-#!/var/apps/emh/.emh/bin/python
+#!/home/sryzhov/devel/django/emh/.emh/bin/python
 #
 # The Python Imaging Library
 # $Id$
