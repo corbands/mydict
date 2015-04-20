@@ -33,10 +33,10 @@ class RegisterForm(forms.ModelForm):
   password = forms.CharField(widget = forms.PasswordInput())
   password2 = forms.CharField(widget = forms.PasswordInput())
   email = forms.EmailField()
-  first_name = forms.CharField(max_length=64)
-  last_name = forms.CharField(max_length=64)
-  region = forms.CharField(max_length=64)
-  about = forms.CharField(max_length=64)
+  first_name = forms.CharField(max_length=64, required=False)
+  last_name = forms.CharField(max_length=64, required=False)
+  region = forms.CharField(max_length=64, required=False)
+  about = forms.CharField(max_length=64, required=False)
 
   class Meta:
     model = UserProfile

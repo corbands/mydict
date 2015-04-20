@@ -71,6 +71,11 @@ DATABASES = {
     # }
 }
 
+# EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
